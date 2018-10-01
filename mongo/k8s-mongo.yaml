@@ -1,0 +1,42 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: mongo
+  namespace: task-todo
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: anspfeifer/mongo:3.2
+        resources:
+          requests:
+            cpu: 0.5
+            memory: 700M
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - mountPath: /data/mongo
+          name: mongo-data
+
+      volumes:
+      - name: mongo-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: mongo
+  name: mongo
+  namespace: task-todo
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+  selector:
+    name: mongo
