@@ -2,8 +2,8 @@ resource "aws_vpc" "vpc-task-todo" {
   cidr_block = "10.0.0.0/16"
   tags = "${
     map(
-     "Name", "${var.cluster_name}",
-     "kubernetes.io/cluster/${var.cluster_name}", "shared"
+     "Name", "vpc-${var.label}",
+     "kubernetes.io/cluster/${var.label}", "shared"
     )
   }"
 }
@@ -15,8 +15,8 @@ resource "aws_subnet" "subnet-task-todo" {
   vpc_id            = "${aws_vpc.vpc-task-todo.id}"
   tags = "${
     map(
-     "Name", "${var.cluster_name}",
-     "kubernetes.io/cluster/${var.cluster_name}", "shared"
+     "Name", "subnet-${var.label}-${count.index}",
+     "kubernetes.io/cluster/${var.label}", "shared"
     )
   }"
 }
@@ -24,7 +24,7 @@ resource "aws_subnet" "subnet-task-todo" {
 resource "aws_internet_gateway" "gateway-task-todo" {
   vpc_id = "${aws_vpc.vpc-task-todo.id}"
   tags {
-    Name = "${var.cluster_name}"
+    Name = "gateway-${var.label}"
   }
 }
 

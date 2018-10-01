@@ -1,5 +1,5 @@
-resource "aws_eks_cluster" "kubernetes-task-todo" {
-  name     = "${var.cluster_name}"
+resource "aws_eks_cluster" "cluster-task-todo" {
+  name     = "cluster-${var.label}"
   role_arn = "${aws_iam_role.cluster-role.arn}"
 
   vpc_config {
