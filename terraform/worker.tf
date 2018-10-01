@@ -25,7 +25,7 @@ resource "aws_launch_configuration" "launch-task-todo" {
   associate_public_ip_address = true
   iam_instance_profile        = "${aws_iam_instance_profile.worker-profile.name}"
   image_id                    = "${data.aws_ami.eks-worker.id}"
-  instance_type               = "m4.large"
+  instance_type               = "${var.ami}"
   name_prefix                 = "launch-task-todo"
   security_groups             = ["${aws_security_group.sg-worker-task-todo.id}"]
   user_data_base64            = "${base64encode(local.worker-userdata)}"
