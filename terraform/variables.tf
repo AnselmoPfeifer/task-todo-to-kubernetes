@@ -11,5 +11,5 @@ variable "role_description" {
 }
 
 variable "label" {
-  default = "task_todo"
+  default = "task-todo"
 }
