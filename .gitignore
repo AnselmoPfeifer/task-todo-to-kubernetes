@@ -3,3 +3,4 @@ venv/
 task-todo-to-kubernetes.iml
 terraform.tfstate
 terraform.tfstate.backup
+DOC.md
