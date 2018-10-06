@@ -3,7 +3,8 @@ variable "region" {
 }
 
 variable "ami" {
-  default = "m4.large"
+  #default = "m4.large"
+  default = "t2.small"
 }
 
 variable "role_description" {
