@@ -4,7 +4,7 @@ metadata:
   name: nodejs
   namespace: task-todo
   labels:
-    name: nodejs
+    app: nodejs
 spec:
   type: LoadBalancer
   ports:
@@ -13,6 +13,7 @@ spec:
       protocol: TCP
   selector:
     app: task-todo
+    tier: frontend
 
 ---
 kind: Deployment
@@ -21,7 +22,7 @@ metadata:
   name: nodejs
   namespace: task-todo
   labels:
-    name: nodejs
+    app: nodejs
 spec:
   replicas: 1
   template:
@@ -33,12 +34,11 @@ spec:
       - name: nodejs
         image: node:boron
         imagePullPolicy: Always
-        resources:
-          requests:
-            cpu: 0.5
-            memory: 700M
+        command: ['/bin/bash', '-c']
+        args: [ 'git clone https://github.com/AnselmoPfeifer/node-todo.git && cd node-todo && ./start.sh' ]
         ports:
-        - containerPort: 27017
+        - containerPort: 8080
         env:
-        - name: MONGO_INITDB_DATABASE
-          value: task-db
+        - name: NODE_ENV
+          value: production
+

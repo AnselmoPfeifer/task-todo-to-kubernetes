@@ -3,19 +3,32 @@
 NS='task-todo'
 ACTION=${1}
 
-if [ ${ACTION} == 'create' ]; then
+function createdNewEKS() {
     echo "Creating new k8s cluster using terraform apply"
     (cd terraform && terraform init; terraform plan; terraform apply -auto-approve)
     aws eks update-kubeconfig --name cluster-task-todo
     kubectl get svc
     kubectl get nodes
+}
 
-elif [ ${ACTION} == 'deploy' ]; then
+function deployApp() {
     echo "Executing the k8s build and deploy"
     kubectl create namespace task-todo || true
     (cd mongo; kubectl apply --filename=k8s-mongo.yaml)
-    (cd nodejs && build-image.sh && kubectl apply --filename=k8s-nodejs.yaml)
+    (cd nodejs && kubectl apply --filename=k8s-nodejs.yaml)
     kubectl get pod -n ${NS}
+}
+
+
+if [ ${ACTION} == 'create' ]; then
+    createdNewEKS
+
+elif [ ${ACTION} == 'create-and-deploy' ]; then
+    createdNewEKS
+    deployApp
+
+elif [ ${ACTION} == 'deploy' ]; then
+    deployApp
 
 elif [ ${ACTION} == 'destroy' ]; then
     echo "Destroying k8s cluster using terraform destroy"
