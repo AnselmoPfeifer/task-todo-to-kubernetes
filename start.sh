@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+NS='task-todo'
 ACTION=${1}
 
 if [ ${ACTION} == 'create' ]; then
@@ -11,8 +12,10 @@ if [ ${ACTION} == 'create' ]; then
 
 elif [ ${ACTION} == 'deploy' ]; then
     echo "Executing the k8s build and deploy"
-    # (cd mongo && build.sh && kubectl apply --filename=k8s-mongo.yaml)
-    # (cd nodejs && build.sh && kubectl apply --filename=k8s-nodejs.yaml)
+    kubectl create namespace task-todo || true
+    (cd mongo; kubectl apply --filename=k8s-mongo.yaml)
+    (cd nodejs && build-image.sh && kubectl apply --filename=k8s-nodejs.yaml)
+    kubectl get pod -n ${NS}
 
 elif [ ${ACTION} == 'destroy' ]; then
     echo "Destroying k8s cluster using terraform destroy"

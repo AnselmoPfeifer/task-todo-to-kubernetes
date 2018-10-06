@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs
+  namespace: task-todo
+  labels:
+    name: nodejs
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: task-todo
+
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: nodejs
+  namespace: task-todo
+  labels:
+    name: nodejs
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nodejs
+    spec:
+      containers:
+      - name: nodejs
+        image: node:boron
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 0.5
+            memory: 700M
+        ports:
+        - containerPort: 27017
+        env:
+        - name: MONGO_INITDB_DATABASE
+          value: task-db
