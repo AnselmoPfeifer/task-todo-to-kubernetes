@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs
+  namespace: task-todo
+  labels:
+    app: nodejs
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: task-todo
+    tier: frontend
+
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: nodejs
+  namespace: task-todo
+  labels:
+    app: nodejs
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nodejs
+    spec:
+      containers:
+      - name: nodejs
+        image: node:boron
+        imagePullPolicy: Always
+        command: ['/bin/bash', '-c']
+        args: [ 'git clone https://github.com/AnselmoPfeifer/node-todo.git && cd node-todo && ./start.sh' ]
+        ports:
+        - containerPort: 8080
+        env:
+        - name: NODE_ENV
+          value: production
+
