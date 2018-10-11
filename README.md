@@ -1,5 +1,10 @@
 # Task Todo to Kubernetes
 
+- The idea of this immutable infrastructure is: 
+Create the new k8s cluster using the AWS EKS and execute the deploy of a Mongo database server, 
+and NodeJS Server to run the node application. Both servers are scalable.
+
+![](layout.png)
 ### Install dependencies
 - MacOS:
 ```
