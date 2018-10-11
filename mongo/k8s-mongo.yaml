@@ -1,43 +1,28 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pvc-mongodb
-  namespace: task-todo
-  labels:
-    app: mongodb
+ name: mongodb-volume
+ namespace: task-todo
+ labels:
+   type: amazonEBS
 spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 512Mi
-
+ accessModes:
+   - ReadWriteOnce
+ storageClassName: sc-mongodb
+ resources:
+   requests:
+     storage: 5Gi
 ---
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  name: mongodb-volume
-#  namespace: task-todo
-#  labels:
-#    type: amazonEBS
-#spec:
-#  accessModes:
-#    - ReadWriteOnce
-#  storageClassName: sc-mongodb
-#  resources:
-#    requests:
-#      storage: 5Gi
-#---
 
-#kind: StorageClass
-#apiVersion: storage.k8s.io/v1
-#metadata:
-#  name: sc-mongodb
-#  namespace: task-todo
-#provisioner: kubernetes.io/aws-ebs
-#parameters:
-#  zones: us-east-1a, us-east-1b, us-east-1c
-#---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+ name: sc-mongodb
+ namespace: task-todo
+provisioner: kubernetes.io/aws-ebs
+parameters:
+ zones: us-east-1a, us-east-1b, us-east-1c
+---
 
 kind: Deployment
 apiVersion: extensions/v1beta1
@@ -75,7 +60,6 @@ spec:
             claimName: pvc-mongodb
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -91,11 +75,3 @@ spec:
     app: mongodb
 ---
 
-#apiVersion: v1
-#kind: Secret
-#metadata:
-#  name: mongo-password
-#  namespace: task-todo
-#type: Opaque
-#data:
-#  password: MWYyZDFlMmU2N2RmCg==

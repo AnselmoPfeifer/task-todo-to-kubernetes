@@ -1,19 +1,24 @@
 # Task Todo to Kubernetes
 
-## To install dependencies
+### Install dependencies
 - MacOS:
 ```
 brew install awscli
+wget https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/darwin/amd64/aws-iam-authenticator 
+mv aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
 ```
 - Linux:
-```pip install awscli```
-
-## To Install Authenticator AWS
-- [Linux](https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator)
-
-- [MacOS](https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/darwin/amd64/aws-iam-authenticator)
- mv aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
 ```
+pip install awscli
+wget https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator 
+mv aws-iam-authenticator /usr/local/bin/aws-iam-authenticator
+```
+
+### Set up kubectl to use authentication tokens provided by AWS IAM Authenticator for Kubernetes
+This requires a 1.10+ kubectl binary to work. 
+If you receive Please enter Username: when trying to use kubectl you need to update to the latest kubectl
+
+## Run the command to create and deploy cluster
 - To create the new eks cluster
 ```./start.sh create```
 
@@ -25,4 +30,6 @@ brew install awscli
 
 ## Time spent
 - terraform scripts: 2 hours
-- kubernetes build and deploy: 
+- k8s build and deploy (locally): 1h
+- apply k8s deploy on aws eks: 2h  
+

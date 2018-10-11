@@ -6,7 +6,13 @@ ACTION=${1}
 function createdNewEKS() {
     echo "Creating new k8s cluster using terraform apply"
     (cd terraform && terraform init; terraform plan; terraform apply -auto-approve)
+    
+    aws eks list-clusters
+    aws eks describe-cluster --name cluster-task-todo --query cluster.endpoint
+    aws eks describe-cluster --name cluster-task-todo --query cluster.certificateAuthority.data
     aws eks update-kubeconfig --name cluster-task-todo
+
+    kubectl cluster-info
     kubectl get svc
     kubectl get nodes
 }
@@ -18,7 +24,6 @@ function deployApp() {
     (cd nodejs && kubectl apply --filename=k8s-nodejs.yaml)
     kubectl get pod -n ${NS}
 }
-
 
 if [ ${ACTION} == 'create' ]; then
     createdNewEKS
