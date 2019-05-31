@@ -33,8 +33,4 @@ If you receive Please enter Username: when trying to use kubectl you need to upd
 - To destroy the eks cluster
 ```./start.sh destroy```
 
-## Time spent
-- terraform scripts: 2 hours
-- k8s build and deploy (locally): 1h
-- apply k8s deploy on aws eks: 2h  
 
